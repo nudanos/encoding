@@ -13,7 +13,7 @@ GOBUILDDIR := _build
 override_dh_auto_build: vet
 	dh_auto_build
 
-# We do not vet vendor code
+# NuDanOS: vet every Go package, vendored code included
 # We would like to use '-structtag[s]=false' so the 'BadFormat' tag test in
 # rfc7951/tagkey_test.go can be used, but despite promises of backwards
 # compatibility, it seems that somewhere between go1.11 and go1.15 the flag
@@ -22,5 +22,5 @@ vet:
 	go doc cmd/vet; \
 	if go doc cmd/vet >/dev/null 2>&1; then \
 		GOPATH=$(CURDIR)/$(GOBUILDDIR) go vet $$(find . -type f -name \*.go | \
-			xargs dirname | sort -u | grep -v "/vendor/"); \
+			xargs dirname | sort -u); \
 	fi
